@@ -13,7 +13,19 @@ export default {
       const room = (url.searchParams.get('room') || '').toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 24) || 'farm';
       return env.WORLD.get(env.WORLD.idFromName(room)).fetch(request);
     }
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+    if (url.pathname !== '/' || !(res.headers.get('Content-Type') || '').includes('text/html')) return res;
+    // Link-preview scrapers need absolute URLs, and the host differs per deployment.
+    const abs = (attr) => ({
+      element(el) {
+        const v = el.getAttribute(attr);
+        if (v && v.startsWith('/')) el.setAttribute(attr, url.origin + v);
+      },
+    });
+    return new HTMLRewriter()
+      .on('meta[property="og:url"], meta[property="og:image"], meta[name="twitter:image"]', abs('content'))
+      .on('link[rel="canonical"]', abs('href'))
+      .transform(res);
   },
 };
 

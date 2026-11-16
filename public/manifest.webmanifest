@@ -1,0 +1,14 @@
+{
+  "name": "CowWorld",
+  "short_name": "CowWorld",
+  "description": "Graze, moo, chat and finish farm quests with your herd.",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#8fc8ea",
+  "theme_color": "#8fc8ea",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
